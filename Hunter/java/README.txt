@@ -1,0 +1,1 @@
+This is the MoteHunter java application, largely based on the Oscilloscope TinyOS demo application.
