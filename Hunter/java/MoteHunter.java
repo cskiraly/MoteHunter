@@ -37,7 +37,6 @@ public class MoteHunter implements MessageListener
     window.setCompass (compass);
     mote = new MoteIF (PrintStreamMessenger.err);
     window.setup ();
-    mote.registerListener (new MoteHunterMsg (), this);
     mote.registerListener (new RssiMsg (), this);
     mote.registerListener (new RssiAckMsg (), this);
     mote.registerListener (new RssiRxMsg (), this);
