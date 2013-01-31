@@ -18,29 +18,37 @@ public class MoteHunter implements MessageListener
   MoteIF mote;
   Data data;
   Window window;
+  UsbIssCmps09 compass;
 
   int counter;
 
   int interval = 50;            //ms
 
-  UsbIssCmps09 compass;
   public void setCompass (UsbIssCmps09 c)
   {
     compass = c;
   }
 
-  /* Main entry point */
-  void run ()
+  public MoteHunter ()
   {
     data = new Data (this);
     window = new Window (this);
-    window.setCompass (compass);
     mote = new MoteIF (PrintStreamMessenger.err);
-    window.setup ();
     mote.registerListener (new RssiMsg (), this);
     mote.registerListener (new RssiAckMsg (), this);
     mote.registerListener (new RssiRxMsg (), this);
+  }
 
+  /* Main entry point */
+  void run (String compassID)
+  {
+    try {
+      compass = new UsbIssCmps09 (compassID);
+    } catch (Exception e) {
+      window.error ("Error connecting to compass at " + compassID +"! Going on without direction data ...");
+    }
+    window.setCompass (compass);
+    window.setup ();
     counter = 0;
   }
 
@@ -88,7 +96,7 @@ public class MoteHunter implements MessageListener
       window.newData ();
     }
     //handle direction as a fictive node
-    if (timestamp > 0) {
+    if (timestamp > 0 && compass != null) {
       int yaw, roll, pitch;
       yaw = compass.getYaw ();
       data.update (Data.MeasureType.YAW, 0, timestamp, yaw);
@@ -174,8 +182,6 @@ public class MoteHunter implements MessageListener
     net.tinyos.comm.UnsupportedCommOperationException
   {
     MoteHunter me = new MoteHunter ();
-    UsbIssCmps09 compass = new UsbIssCmps09 (args[0]);
-      me.setCompass (compass);
-      me.run ();
+    me.run (args[0]);
   }
 }
