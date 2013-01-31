@@ -4,4 +4,4 @@ if cygpath -w / >/dev/null 2>/dev/null; then
 else
   CLASSPATH="motehunter.jar:$CLASSPATH"
 fi
-java MoteHunter $1
+java MoteHunter $@

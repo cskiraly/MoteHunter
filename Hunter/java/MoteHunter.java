@@ -11,6 +11,8 @@
 
 import net.tinyos.message.*;
 import net.tinyos.util.*;
+import net.tinyos.packet.BuildSource;
+import net.tinyos.packet.PhoenixSource;
 import java.io.*;
 
 public class MoteHunter implements MessageListener
@@ -33,12 +35,29 @@ public class MoteHunter implements MessageListener
   {
     data = new Data (this);
     window = new Window (this);
-    mote = new MoteIF (PrintStreamMessenger.err);
   }
 
   /* Main entry point */
-  void run (String compassID)
+  void run (String compassID, String hunterMoteConn)
   {
+    PhoenixSource phoenix;
+
+    try {
+      if (hunterMoteConn == null) {
+        phoenix = BuildSource.makePhoenix(PrintStreamMessenger.err);
+      } else {
+        phoenix = BuildSource.makePhoenix(hunterMoteConn, PrintStreamMessenger.err);
+      }
+
+      try {
+        mote = new MoteIF (phoenix);
+      } catch (Exception e) {
+        window.error ("Error connecting to hunter mote at " + hunterMoteConn +"! Going on without data ...");
+      }
+    } catch (Exception e) {
+      window.error ("Error connecting to hunter mote! Going on without direction data ...");
+    }
+
     try {
       compass = new UsbIssCmps09 (compassID);
     } catch (Exception e) {
@@ -151,7 +170,7 @@ public class MoteHunter implements MessageListener
     SetPingerMsg msg = new SetPingerMsg ();
 
     msg.set_target_id (nodeId);
-    try {
+    if (mote != null) try {
       mote.send (MoteIF.TOS_BCAST_ADDR, msg);
     }
     catch (IOException e) {
@@ -165,7 +184,7 @@ public class MoteHunter implements MessageListener
     SetChannelMsg msg = new SetChannelMsg ();
 
     msg.set_channel (channel);
-    try {
+    if (mote != null) try {
       mote.send (MoteIF.TOS_BCAST_ADDR, msg);
     }
     catch (IOException e) {
@@ -182,7 +201,14 @@ public class MoteHunter implements MessageListener
   public static void main (String[]args) throws IOException,
     net.tinyos.comm.UnsupportedCommOperationException
   {
+    if (args.length != 2) {
+      //usage();
+      System.exit(1);
+    }
+
     MoteHunter me = new MoteHunter ();
-    me.run (args[0]);
+    String compassID = args[0];
+    String hunterMoteConn = args[1];
+    me.run (hunterMoteConn, compassID);
   }
 }
