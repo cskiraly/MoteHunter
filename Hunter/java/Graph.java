@@ -266,12 +266,6 @@ class Graph extends JPanel
     }
   }
 
-  /* Update X-axis range in GUI */
-  void updateXLabel ()
-  {
-    parent.xLabel.setText ("X: " + gx0 + " - " + gx1);
-  }
-
   /* Pause/restart X-axis recentering */
   void pauseXUpdate (Boolean b)
   {
@@ -291,7 +285,6 @@ class Graph extends JPanel
       gx1 -= gx0;
       gx0 = 0;
     }
-    updateXLabel ();
   }
 
   /* New data received. Redraw graph, scrolling if necessary */

@@ -252,12 +252,6 @@ class GraphDir extends JPanel
 
   }
 
-  /* Update X-axis range in GUI */
-  void updateXLabel ()
-  {
-    parent.xLabel.setText ("X: " + gx0 + " - " + gx1);
-  }
-
   /* Ensure that graph is nicely positioned on screen. max is the largest 
      sample number received from any mote. */
   private void recenter (int max)
@@ -271,7 +265,6 @@ class GraphDir extends JPanel
       gx1 -= gx0;
       gx0 = 0;
     }
-    updateXLabel ();
   }
 
   /* New data received. Redraw graph, scrolling if necessary */
