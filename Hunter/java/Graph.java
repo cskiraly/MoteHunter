@@ -105,6 +105,7 @@ class Graph extends JPanel
       g2d.setColor (bgColor);
       g2d.fillRect (0, 0, getWidth (), getHeight ());
       drawYAxis (g2d);
+      drawXAxis (g2d);
 
       Graphics clipped = makeClip (g2d);
       int count = parent.moteListModel.size ();
@@ -159,6 +160,49 @@ class Graph extends JPanel
       tick += tickInterval;
     }
 
+  }
+
+  /* Draw the X-axis */
+  protected void drawXAxis (Graphics2D g)
+  {
+    int axis_y = BORDER_BOTTOM + height * 9 / 10;
+    int width = getWidth () - BORDER_LEFT - BORDER_RIGHT;
+
+    g.setColor (axisColor);
+    g.drawLine (BORDER_LEFT, axis_y, width - BORDER_LEFT - BORDER_RIGHT - 1, axis_y);
+
+    /* Draw a reasonable set of tick marks */
+    int nTicks = width / TICK_SPACING;
+    if (nTicks > MAX_TICKS) {
+      nTicks = MAX_TICKS;
+    }
+
+    int tickInterval = (gx1 - gx0 + 1) / nTicks;
+    if (tickInterval == 0) {
+      tickInterval = 1;
+    }
+
+    /* Tick interval should be of the family A * 10^B,
+       where A = 1, 2 * or 5. We tend more to rounding A up, to reduce
+       rather than increase the number of ticks. */
+    int B = (int) (Math.log (tickInterval) / Math.log (10));
+    int A = (int) (tickInterval / Math.pow (10, B) + 0.5);
+    if (A > 2) {
+      A = 5;
+    } else if (A > 5) {
+      A = 10;
+    }
+
+    tickInterval = A * (int) Math.pow (10, B);
+
+    /* Ticks are printed at multiples of tickInterval */
+    int tick = ((gx0 + tickInterval - 1) / tickInterval) * tickInterval;
+    while (tick <= gx1) {
+      int stick = screenX (tick) + BORDER_LEFT;
+      rightDrawString (g, "" + tick * (double) parent.parent.interval / 1000 + " s",stick, axis_y + TICK_WIDTH / 2 + 2);
+      g.drawLine (stick, axis_y - TICK_WIDTH / 2, stick, axis_y - TICK_WIDTH / 2 + TICK_WIDTH);
+      tick += tickInterval;
+    }
   }
 
   /* Draw graph for mote nodeId */

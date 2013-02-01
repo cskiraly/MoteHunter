@@ -303,7 +303,7 @@ class Window {
 	Hashtable<Integer, JLabel> xTable = new Hashtable<Integer, JLabel>();
 	for (int i = 0; i <= 8; i += 2) {
 	    xTable.put(new Integer(i),
-		       makeSmallLabel("" + (Graph.MIN_WIDTH << i),
+		       makeSmallLabel("" + ((Graph.MIN_WIDTH << i) * parent.interval / 1000.0 + " s"),
 				      JLabel.CENTER));
 	}
 	xSlider.setLabelTable(xTable);
