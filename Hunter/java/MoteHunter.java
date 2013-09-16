@@ -82,13 +82,19 @@ public class MoteHunter implements MessageListener
     if (msg instanceof RssiRxMsg) {
       RssiRxMsg rmsg = (RssiRxMsg) msg;
 
+
       /* Update mote data */
       timestamp = (int) (rmsg.get_timestamp () / interval);
-      data.update (Data.MeasureType.RCV, rmsg.get_id (), timestamp, rmsg.get_rssi ());
-      /* Inform the GUI that new data showed up */
-      System.out.print (System.currentTimeMillis () + " " + timestamp + " " + "RX" + " " +
+      if (rmsg.get_id () >= 500) {
+        System.out.print (System.currentTimeMillis () + " " + timestamp + " " + "RX" + " " +
+                        "unhandled message with id:" + rmsg.get_id ());
+      } else {
+        data.update (Data.MeasureType.RCV, rmsg.get_id (), timestamp, rmsg.get_rssi ());
+        /* Inform the GUI that new data showed up */
+        System.out.print (System.currentTimeMillis () + " " + timestamp + " " + "RX" + " " +
                         rmsg.get_id () + " " + rmsg.get_rssi () + " " + "NAN");
-      window.newData ();
+        window.newData ();
+      }
     } else if (msg instanceof RssiAckMsg) {
       RssiAckMsg rmsg = (RssiAckMsg) msg;
 
