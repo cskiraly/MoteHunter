@@ -34,9 +34,6 @@ public class MoteHunter implements MessageListener
     data = new Data (this);
     window = new Window (this);
     mote = new MoteIF (PrintStreamMessenger.err);
-    mote.registerListener (new RssiMsg (), this);
-    mote.registerListener (new RssiAckMsg (), this);
-    mote.registerListener (new RssiRxMsg (), this);
   }
 
   /* Main entry point */
@@ -49,6 +46,9 @@ public class MoteHunter implements MessageListener
     }
     window.setCompass (compass);
     window.setup ();
+    mote.registerListener (new RssiMsg (), this);
+    mote.registerListener (new RssiAckMsg (), this);
+    mote.registerListener (new RssiRxMsg (), this);
     counter = 0;
   }
 
