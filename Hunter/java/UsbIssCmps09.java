@@ -174,7 +174,7 @@ public class UsbIssCmps09 implements SerialPortListener {
   public static void main(String[] args) throws IOException, UnsupportedCommOperationException {
     UsbIssCmps09 compass = new UsbIssCmps09(args[0]);
     while(true) {
-      System.out.println(compass.getDirection());
+      System.out.println("yaw:" + compass.getYaw() + " roll:" + compass.getRoll() + " pitch:" + compass.getPitch());
     }
   }
 }
