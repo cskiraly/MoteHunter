@@ -22,8 +22,6 @@ public class MoteHunter implements MessageListener
   Window window;
   UsbIssCmps09 compass;
 
-  int counter;
-
   int interval = 50;            //ms
 
   public void setCompass (UsbIssCmps09 c)
@@ -68,7 +66,6 @@ public class MoteHunter implements MessageListener
     mote.registerListener (new RssiMsg (), this);
     mote.registerListener (new RssiAckMsg (), this);
     mote.registerListener (new RssiRxMsg (), this);
-    counter = 0;
   }
 
   /* The data object has informed us that nodeId is a previously unknown
