@@ -106,8 +106,9 @@ public class MoteHunter implements MessageListener
 
       pitch = compass.getPitch () + 90;
       data.update (Data.MeasureType.PITCH, 0, timestamp, pitch);
-      System.out.println (" " + yaw + " " + pitch + " " + roll);
+      System.out.print(" " + yaw + " " + pitch + " " + roll);
     }
+    System.out.println();
 
   }
 
