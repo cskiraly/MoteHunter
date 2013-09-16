@@ -289,7 +289,7 @@ class Window {
 	channelSelector.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) { setChannel((Integer)channelSelector.getSelectedItem()); }
 	    } );
-	channelSelector.setSelectedItem(26);
+	channelSelector.setSelectedItem(16);
 	
 	// Clear data.
 	JButton clearButton = makeButton("Clear data", new ActionListener() {
