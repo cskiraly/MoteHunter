@@ -297,19 +297,17 @@ class Window {
 	    } );
 	
 	// Adjust X-axis zoom.
-	Box xControl = new Box(BoxLayout.Y_AXIS);
-	xLabel = makeLabel("", JLabel.CENTER);
+	Box xControl = new Box(BoxLayout.X_AXIS);
+	xLabel = makeLabel("X:", JLabel.RIGHT);
 	final JSlider xSlider = new JSlider(JSlider.HORIZONTAL, 0, 8, graph.scale);
 	Hashtable<Integer, JLabel> xTable = new Hashtable<Integer, JLabel>();
 	for (int i = 0; i <= 8; i += 2) {
 	    xTable.put(new Integer(i),
-		       makeSmallLabel("" + (Graph.MIN_WIDTH << i),
+		       makeSmallLabel("" + ((Graph.MIN_WIDTH << i) * parent.interval / 1000.0 + " s"),
 				      JLabel.CENTER));
 	}
 	xSlider.setLabelTable(xTable);
 	xSlider.setPaintLabels(true);
-	graph.updateXLabel();
-	graphDir.updateXLabel();
 	graph.setScale(graph.scale);
 	graphDir.setScale(graph.scale);
 	xSlider.addChangeListener(new ChangeListener() {
