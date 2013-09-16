@@ -182,11 +182,11 @@ implementation
 	  call RadioPacket.setPayloadLength(uartQueue[uartIn], sizeof(rssi_rx_t));
 	  rssi_rx = call RadioPacket.getPayload(uartQueue[uartIn], sizeof(rssi_rx_t));
 	  rssi_rx->id = call RadioAMPacket.source(msg);
-	  if (call PacketTimeStamp.isValid(msg)) {
-	    rssi_rx->timestamp = call PacketTimeStamp.timestamp(msg);
-	  } else {
+	//  if (call PacketTimeStamp.isValid(msg)) {
+	//    rssi_rx->timestamp = call PacketTimeStamp.timestamp(msg);
+	//  } else {
 	    rssi_rx->timestamp = call LocalTimeMilli.get();
-	  }
+	//  }
           rssi_rx->rssi = (call CC2420Packet.getRssi(msg)) + 128;	// getRssi gives back -128..127
 
 	  uartIn = (uartIn + 1) % UART_QUEUE_LEN;
